@@ -25,7 +25,13 @@ module HighchartsServer
   private
 
     def capture_png
-      @executor.run!(%Q{cutycapt --url=#{path_to_url(html_path).shellescape} --out=#{capture_tempfile.path.shellescape} --out-format=png})
+      cmd = %Q{cutycapt --url=#{path_to_url(html_path).shellescape} --out=#{capture_tempfile.path.shellescape} --out-format=png}
+
+      if ENV["DISPLAY"]
+        @executor.run!(cmd)
+      else
+        @executor.run!(%Q{xvfb-run --server-args="-screen 0, 1024x768x24" #{cmd}})
+      end
     end
 
     def crop_to(path)
