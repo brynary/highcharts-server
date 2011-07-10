@@ -1,0 +1,32 @@
+<!doctype html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script src="http://highcharts.com/js/2.1.5/highcharts.js"></script>
+  <script>
+    var chartOptions = <%= chart_options.to_json %>;
+
+    // Workaround JSON encoding of dates.
+    // Highcharts want them in ms, so detect and convert them
+    $.each(chartOptions.series, function(seriesIndex, series) {
+      $.each(series.data, function(dataIndex, data) {
+        if (data[0].match) {
+          var datePattern = /^(\d{4})-(\d{2})-(\d{2})$/,
+              matches = data[0].match(datePattern);
+
+          if (matches) {
+            data[0]= Date.UTC(matches[1], matches[2], matches[3]);
+          }
+        }
+      });
+    });
+    
+    $(function() {
+      new Highcharts.Chart(chartOptions);
+    });
+  </script>
+</head>
+<body>
+  <div id="container" style="width: <%= width %>px; height: <%= height %>px; overflow: hidden">
+  </div>
+</body>
+</html>
