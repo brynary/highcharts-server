@@ -1,1 +1,1 @@
-thin: bundle exec thin -R config.ru start
+thin: bin/thin -R config.ru start
