@@ -25,7 +25,7 @@ module HighchartsServer
   private
 
     def capture_png
-      @executor.run!(%Q{CutyCapt --url=#{path_to_url(html_path).shellescape} --out=#{capture_tempfile.path.shellescape} --out-format=png})
+      @executor.run!(%Q{cutycapt --url=#{path_to_url(html_path).shellescape} --out=#{capture_tempfile.path.shellescape} --out-format=png})
     end
 
     def crop_to(path)
