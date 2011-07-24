@@ -11,7 +11,7 @@ module HighchartsServer
 
   class Server < Sinatra::Base
     post "/charts" do
-      chart_options = JSON.parse(request.env["rack.input"].read)
+      chart_options = JSON.parse(CGI.unescape(request.env["rack.input"].read))
       hash = Digest::MD5.hexdigest(chart_options.to_json)
       image_path = HighchartsServer.root.join("tmp", "charts-#{hash}-#{Time.now.to_i}-#{$$}.png").to_s
       cuty_capt = CutyCapt.new(chart_options)
